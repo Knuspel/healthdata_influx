@@ -11,12 +11,18 @@ services:
 
   influxdb:
     image: influxdb
+    ports:
+    - 8086:8086
+    volumes:
+    - influxdb:/var/lib/influxdb  
     env_file:
       - './docker-compose/env.influxdb'
 
   grafana:
     image: grafana/grafana:latest
     volumes:
+#      - grafana:/etc/grafana
+      - grafana:/var/lib/grafana
       - ./docker-compose/grafana_datasources:/etc/grafana/provisioning/datasources
       - ./docker-compose/grafana_dashboard_providers:/etc/grafana/provisioning/dashboards
       - ./docker-compose/grafana_dashboards:/var/lib/grafana/dashboards
@@ -26,3 +32,6 @@ services:
       - './docker-compose/env.grafana'
     links:
       - influxdb
+volumes:
+  grafana:
+  influxdb:
